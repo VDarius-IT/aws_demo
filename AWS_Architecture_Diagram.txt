@@ -62,6 +62,8 @@
 |                                                                                                             |
 +-------------------------------------------------------------------------------------------------------------+
 
+Mermaid Diagram:
+
 flowchart TB
   subgraph AWS["AWS Region: eu-central-1 (Frankfurt)"]
     direction TB
