@@ -19,34 +19,6 @@ A high-level view of the architecture includes:
 -   **IAM** for secure access management.
 -   (Partially implemented) **Cognito** for user authentication flows.
 
-+-----------------------------------------------------------------+
-|                   AWS Region: EU Frankfurt (eu-central-1)       |
-|                                                                 |
-|   +-----------------------------------------------------------+ |
-|   |                    VPC (CIDR: /18)                        | |
-|   |                                                           | |
-|   | +-------------------------+     +-------------------------+ |
-|   | |    Public Subnet        |     |   Database Subnets      | |
-|   | |      (/22)              |     |   (/25 x 3 AZs)         | |
-|   | |                         |     |                         | |
-|   | |  [SG EC2] <---+-------  |     |  [SG RDS] <---+-------- | |
-|   | |      |        | HTTP/S  |     |      |        | MySQL   | |
-|   | |      v        | (80,443)|     |      v        | (3306)  | |
-|   | | [EC2 Instance]|         |     | [RDS MySQL]   |         | |
-|   | |(Nginx,Node.js)|         |     | (Private)     |         | |
-|   | | (Public IP)   |         |     |               |         | |
-|   | +-------------------------+     +-------------------------+ |
-|   |         ^                                                 | |
-|   |         | SSH (22)                                        | |
-|   +---------|-------------------------------------------------+ |
-|             |                                                   |
-|   Internet --                                                   |
-|   Admin   ----                                                  |
-|                                                                 |
-|  [IAM] ----------------> Manages AWS Resources                  |
-|  [Cognito] -------------> User Authentication (Partial)         |
-+-----------------------------------------------------------------+
-
 ## Network Configuration
 
 The network infrastructure is built around a single VPC, segmented into multiple subnets across different Availability Zones to provide logical isolation and prepare for higher availability configurations.
