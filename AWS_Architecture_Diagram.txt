@@ -61,3 +61,54 @@
 |  +-------------------------------------------------------------------------------------------------------+  |
 |                                                                                                             |
 +-------------------------------------------------------------------------------------------------------------+
+
+flowchart TB
+  subgraph AWS["AWS Region: eu-central-1 (Frankfurt)"]
+    direction TB
+    subgraph VPC["VPC (/18 CIDR)"]
+      direction LR
+     %% Public Subnet and Route Table side by side
+      subgraph PUB["Public Subnet (/22)"]
+        EC2["EC2 Instance
+        • Nginx
+        • Node.js Application
+        • UFW Firewall"]
+      end
+      subgraph RT["Route Table"]
+        RTDesc["• Route to Internet Gateway
+        • Route to VPC local"]
+      end
+      %% RDS components below
+      subgraph RDSGROUP["RDS Subnet Group"]
+        RDS["RDS MySQL Instance
+        • Daily Backups
+        • Multi-AZ Subnets (/25 each in a, b, c)"]
+      end
+      subgraph SGROUPS["Security Groups"]
+        SG_EC2["EC2 SG:
+        • Allow HTTP/HTTPS from anywhere
+        • Allow SSH from admin IP only
+        • Allow outbound to internet
+        • Allow MySQL to RDS SG"]
+        SG_RDS["RDS SG:
+        • Allow MySQL from EC2 SG only"]
+      end
+      %% Layout arrows
+      EC2 -->|“uses”| RTDesc
+      EC2 -->|“connects on 3306”| RDS
+      EC2 ---> SG_EC2
+      SG_EC2 -->|“MySQL”| SG_RDS
+    end
+
+    %% Bottom row: IAM and Monitoring
+    subgraph IAM["IAM Configuration"]
+      IAMDesc["• Admin User Group
+      • MFA-Protected Console Access
+      • Email Alerts for Suspicious Activity"]
+    end
+
+    subgraph MON["Monitoring & Alerting"]
+      MONDesc["• Billing Alerts (Budget set to zero)
+      • Login Activity Monitoring"]
+    end
+  end
