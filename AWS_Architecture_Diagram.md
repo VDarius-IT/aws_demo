@@ -1,6 +1,7 @@
 ```mermaid
 flowchart TB
     subgraph AWS["AWS Region: eu-central-1 (Frankfurt)"]
+
         direction TB
 
         subgraph VPC["VPC (/18 CIDR)"]
